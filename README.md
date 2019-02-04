@@ -10,4 +10,4 @@ Pendientes:
   Integration Tests
   
  Base de datos:
- En el directorio raiz se encuentra un script para generar la base de datos SegurosGAP, con algunos datos de prueba.
+ En el directorio raiz se encuentra un script (SegurosGAP.sql) para generar la base de datos SegurosGAP, con algunos datos de prueba.
