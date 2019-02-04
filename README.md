@@ -1,7 +1,7 @@
 # Seguros-GAP
 
 Implementadas las operaciones CRUD para Polizas.
-Implementada la asignación/cancelacio de clientes a polizas.
+Implementada la asignación/cancelación de clientes a polizas.
 
 Arquitecture: Clean Architecture, RepositoryPattern
 
