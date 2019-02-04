@@ -3,7 +3,7 @@
 Implementadas las operaciones CRUD para Polizas.
 Implementada la asignación/cancelación de clientes a polizas.
 
-Arquitecture: Clean Architecture, RepositoryPattern
+Arquitectura: Clean Architecture, RepositoryPattern
 
 Pendientes:
   Unit Tests
