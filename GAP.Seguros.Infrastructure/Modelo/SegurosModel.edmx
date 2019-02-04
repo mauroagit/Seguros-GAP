@@ -1,0 +1,483 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="SegurosGAPModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Clientes">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="TipoCliente" Type="tinyint" Nullable="false" />
+          <Property Name="Identificacion" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="Nombre" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="Telefono" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="Direccion" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="Correo" Type="nvarchar" MaxLength="150" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ClientesPolizas">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Cliente" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Poliza" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="InicioVigencia" Type="datetime" Nullable="false" />
+          <Property Name="Precio" Type="decimal" Precision="10" Scale="0" Nullable="false" />
+          <Property Name="ValorAsegurado" Type="decimal" Precision="12" Scale="0" Nullable="false" />
+          <Property Name="Activa" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Cubrimientos">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="smallint" Nullable="false" />
+          <Property Name="Nombre" Type="nvarchar" MaxLength="40" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CubrimientosPoliza">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Poliza" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Cubrimiento" Type="smallint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="NivelesRiesgo">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="tinyint" Nullable="false" />
+          <Property Name="Nombre" Type="nvarchar" MaxLength="30" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Polizas">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Codigo" Type="nvarchar" MaxLength="15" Nullable="false" />
+          <Property Name="Nombre" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Descripcion" Type="nvarchar" MaxLength="1000" Nullable="false" />
+          <Property Name="PeriodoCobertura" Type="tinyint" Nullable="false" />
+          <Property Name="PorcentajeCubrimiento" Type="decimal" Precision="5" Scale="2" Nullable="false" />
+          <Property Name="Riesgo" Type="tinyint" Nullable="false" />
+          <Property Name="FechaCreacion" Type="datetime" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="UsuarioCreacion" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="FechaModificacion" Type="datetime" />
+          <Property Name="UsuarioModificacion" Type="uniqueidentifier" />
+          <Property Name="FechaBorrado" Type="datetime" />
+          <Property Name="UsuarioBorrado" Type="uniqueidentifier" />
+        </EntityType>
+        <EntityType Name="TiposCliente">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="tinyint" Nullable="false" />
+          <Property Name="Nombre" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Clientes_TiposCliente">
+          <End Role="TiposCliente" Type="Self.TiposCliente" Multiplicity="1" />
+          <End Role="Clientes" Type="Self.Clientes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TiposCliente">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Clientes">
+              <PropertyRef Name="TipoCliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ClientesPolizas_Clientes">
+          <End Role="Clientes" Type="Self.Clientes" Multiplicity="1" />
+          <End Role="ClientesPolizas" Type="Self.ClientesPolizas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Clientes">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ClientesPolizas">
+              <PropertyRef Name="Cliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ClientesPolizas_Polizas">
+          <End Role="Polizas" Type="Self.Polizas" Multiplicity="1" />
+          <End Role="ClientesPolizas" Type="Self.ClientesPolizas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Polizas">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ClientesPolizas">
+              <PropertyRef Name="Poliza" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CubrimientosPoliza_Cubrimientos">
+          <End Role="Cubrimientos" Type="Self.Cubrimientos" Multiplicity="1" />
+          <End Role="CubrimientosPoliza" Type="Self.CubrimientosPoliza" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cubrimientos">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CubrimientosPoliza">
+              <PropertyRef Name="Cubrimiento" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CubrimientosPoliza_Polizas">
+          <End Role="Polizas" Type="Self.Polizas" Multiplicity="1" />
+          <End Role="CubrimientosPoliza" Type="Self.CubrimientosPoliza" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Polizas">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CubrimientosPoliza">
+              <PropertyRef Name="Poliza" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Polizas_NivelesRiesgo">
+          <End Role="NivelesRiesgo" Type="Self.NivelesRiesgo" Multiplicity="1" />
+          <End Role="Polizas" Type="Self.Polizas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NivelesRiesgo">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Polizas">
+              <PropertyRef Name="Riesgo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="SegurosGAPModelStoreContainer">
+          <EntitySet Name="Clientes" EntityType="Self.Clientes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ClientesPolizas" EntityType="Self.ClientesPolizas" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Cubrimientos" EntityType="Self.Cubrimientos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CubrimientosPoliza" EntityType="Self.CubrimientosPoliza" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="NivelesRiesgo" EntityType="Self.NivelesRiesgo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Polizas" EntityType="Self.Polizas" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TiposCliente" EntityType="Self.TiposCliente" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Clientes_TiposCliente" Association="Self.FK_Clientes_TiposCliente">
+            <End Role="TiposCliente" EntitySet="TiposCliente" />
+            <End Role="Clientes" EntitySet="Clientes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ClientesPolizas_Clientes" Association="Self.FK_ClientesPolizas_Clientes">
+            <End Role="Clientes" EntitySet="Clientes" />
+            <End Role="ClientesPolizas" EntitySet="ClientesPolizas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ClientesPolizas_Polizas" Association="Self.FK_ClientesPolizas_Polizas">
+            <End Role="Polizas" EntitySet="Polizas" />
+            <End Role="ClientesPolizas" EntitySet="ClientesPolizas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CubrimientosPoliza_Cubrimientos" Association="Self.FK_CubrimientosPoliza_Cubrimientos">
+            <End Role="Cubrimientos" EntitySet="Cubrimientos" />
+            <End Role="CubrimientosPoliza" EntitySet="CubrimientosPoliza" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CubrimientosPoliza_Polizas" Association="Self.FK_CubrimientosPoliza_Polizas">
+            <End Role="Polizas" EntitySet="Polizas" />
+            <End Role="CubrimientosPoliza" EntitySet="CubrimientosPoliza" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Polizas_NivelesRiesgo" Association="Self.FK_Polizas_NivelesRiesgo">
+            <End Role="NivelesRiesgo" EntitySet="NivelesRiesgo" />
+            <End Role="Polizas" EntitySet="Polizas" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="SegurosGAPModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Clientes">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="TipoCliente" Type="Byte" Nullable="false" />
+          <Property Name="Identificacion" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Nombre" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Telefono" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Direccion" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Correo" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="TiposCliente" Relationship="Self.FK_Clientes_TiposCliente" FromRole="Clientes" ToRole="TiposCliente" />
+          <NavigationProperty Name="ClientesPolizas" Relationship="SegurosGAPModel.FK_ClientesPolizas_Clientes" FromRole="Clientes" ToRole="ClientesPolizas" />
+        </EntityType>
+        <EntityType Name="Cubrimientos">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int16" Nullable="false" />
+          <Property Name="Nombre" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="CubrimientosPoliza" Relationship="Self.FK_CubrimientosPoliza_Cubrimientos" FromRole="Cubrimientos" ToRole="CubrimientosPoliza" />
+        </EntityType>
+        <EntityType Name="CubrimientosPoliza">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Poliza" Type="Guid" Nullable="false" />
+          <Property Name="Cubrimiento" Type="Int16" Nullable="false" />
+          <NavigationProperty Name="Cubrimientos" Relationship="Self.FK_CubrimientosPoliza_Cubrimientos" FromRole="CubrimientosPoliza" ToRole="Cubrimientos" />
+          <NavigationProperty Name="Polizas" Relationship="Self.FK_CubrimientosPoliza_Polizas" FromRole="CubrimientosPoliza" ToRole="Polizas" />
+        </EntityType>
+        <EntityType Name="NivelesRiesgo">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Byte" Nullable="false" />
+          <Property Name="Nombre" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Polizas" Relationship="Self.FK_Polizas_NivelesRiesgo" FromRole="NivelesRiesgo" ToRole="Polizas" />
+        </EntityType>
+        <EntityType Name="Polizas">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Codigo" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Nombre" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Descripcion" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PeriodoCobertura" Type="Byte" Nullable="false" />
+          <Property Name="PorcentajeCubrimiento" Type="Decimal" Precision="5" Scale="2" Nullable="false" />
+          <Property Name="Riesgo" Type="Byte" Nullable="false" />
+          <Property Name="FechaCreacion" Type="DateTime" Nullable="false" Precision="3" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="UsuarioCreacion" Type="Guid" Nullable="false" />
+          <Property Name="FechaModificacion" Type="DateTime" Precision="3" />
+          <Property Name="UsuarioModificacion" Type="Guid" />
+          <Property Name="FechaBorrado" Type="DateTime" Precision="3" />
+          <Property Name="UsuarioBorrado" Type="Guid" />
+          <NavigationProperty Name="CubrimientosPoliza" Relationship="Self.FK_CubrimientosPoliza_Polizas" FromRole="Polizas" ToRole="CubrimientosPoliza" />
+          <NavigationProperty Name="NivelesRiesgo" Relationship="Self.FK_Polizas_NivelesRiesgo" FromRole="Polizas" ToRole="NivelesRiesgo" />
+          <NavigationProperty Name="ClientesPolizas" Relationship="SegurosGAPModel.FK_ClientesPolizas_Polizas" FromRole="Polizas" ToRole="ClientesPolizas" />
+        </EntityType>
+        <EntityType Name="TiposCliente">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Byte" Nullable="false" />
+          <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Clientes" Relationship="Self.FK_Clientes_TiposCliente" FromRole="TiposCliente" ToRole="Clientes" />
+        </EntityType>
+        <Association Name="FK_Clientes_TiposCliente">
+          <End Role="TiposCliente" Type="Self.TiposCliente" Multiplicity="1" />
+          <End Role="Clientes" Type="Self.Clientes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TiposCliente">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Clientes">
+              <PropertyRef Name="TipoCliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CubrimientosPoliza_Cubrimientos">
+          <End Role="Cubrimientos" Type="Self.Cubrimientos" Multiplicity="1" />
+          <End Role="CubrimientosPoliza" Type="Self.CubrimientosPoliza" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cubrimientos">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CubrimientosPoliza">
+              <PropertyRef Name="Cubrimiento" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CubrimientosPoliza_Polizas">
+          <End Role="Polizas" Type="Self.Polizas" Multiplicity="1" />
+          <End Role="CubrimientosPoliza" Type="Self.CubrimientosPoliza" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Polizas">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CubrimientosPoliza">
+              <PropertyRef Name="Poliza" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Polizas_NivelesRiesgo">
+          <End Role="NivelesRiesgo" Type="Self.NivelesRiesgo" Multiplicity="1" />
+          <End Role="Polizas" Type="Self.Polizas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NivelesRiesgo">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Polizas">
+              <PropertyRef Name="Riesgo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="SegurosGAPEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Clientes" EntityType="Self.Clientes" />
+          <EntitySet Name="Cubrimientos" EntityType="Self.Cubrimientos" />
+          <EntitySet Name="CubrimientosPoliza" EntityType="Self.CubrimientosPoliza" />
+          <EntitySet Name="NivelesRiesgo" EntityType="Self.NivelesRiesgo" />
+          <EntitySet Name="Polizas" EntityType="Self.Polizas" />
+          <EntitySet Name="TiposCliente" EntityType="Self.TiposCliente" />
+          <AssociationSet Name="FK_Clientes_TiposCliente" Association="Self.FK_Clientes_TiposCliente">
+            <End Role="TiposCliente" EntitySet="TiposCliente" />
+            <End Role="Clientes" EntitySet="Clientes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CubrimientosPoliza_Cubrimientos" Association="Self.FK_CubrimientosPoliza_Cubrimientos">
+            <End Role="Cubrimientos" EntitySet="Cubrimientos" />
+            <End Role="CubrimientosPoliza" EntitySet="CubrimientosPoliza" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CubrimientosPoliza_Polizas" Association="Self.FK_CubrimientosPoliza_Polizas">
+            <End Role="Polizas" EntitySet="Polizas" />
+            <End Role="CubrimientosPoliza" EntitySet="CubrimientosPoliza" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Polizas_NivelesRiesgo" Association="Self.FK_Polizas_NivelesRiesgo">
+            <End Role="NivelesRiesgo" EntitySet="NivelesRiesgo" />
+            <End Role="Polizas" EntitySet="Polizas" />
+          </AssociationSet>
+          <EntitySet Name="ClientesPolizas" EntityType="SegurosGAPModel.ClientesPolizas" />
+          <AssociationSet Name="FK_ClientesPolizas_Clientes" Association="SegurosGAPModel.FK_ClientesPolizas_Clientes">
+            <End Role="Clientes" EntitySet="Clientes" />
+            <End Role="ClientesPolizas" EntitySet="ClientesPolizas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ClientesPolizas_Polizas" Association="SegurosGAPModel.FK_ClientesPolizas_Polizas">
+            <End Role="Polizas" EntitySet="Polizas" />
+            <End Role="ClientesPolizas" EntitySet="ClientesPolizas" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="ClientesPolizas">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Cliente" Type="Guid" Nullable="false" />
+          <Property Name="Poliza" Type="Guid" Nullable="false" />
+          <Property Name="InicioVigencia" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Precio" Type="Decimal" Nullable="false" Precision="10" Scale="0" />
+          <Property Name="ValorAsegurado" Type="Decimal" Nullable="false" Precision="12" Scale="0" />
+          <Property Name="Activa" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Clientes" Relationship="SegurosGAPModel.FK_ClientesPolizas_Clientes" FromRole="ClientesPolizas" ToRole="Clientes" />
+          <NavigationProperty Name="Polizas" Relationship="SegurosGAPModel.FK_ClientesPolizas_Polizas" FromRole="ClientesPolizas" ToRole="Polizas" />
+        </EntityType>
+        <Association Name="FK_ClientesPolizas_Clientes">
+          <End Type="SegurosGAPModel.Clientes" Role="Clientes" Multiplicity="1" />
+          <End Type="SegurosGAPModel.ClientesPolizas" Role="ClientesPolizas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Clientes">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ClientesPolizas">
+              <PropertyRef Name="Cliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ClientesPolizas_Polizas">
+          <End Type="SegurosGAPModel.Polizas" Role="Polizas" Multiplicity="1" />
+          <End Type="SegurosGAPModel.ClientesPolizas" Role="ClientesPolizas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Polizas">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ClientesPolizas">
+              <PropertyRef Name="Poliza" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="SegurosGAPModelStoreContainer" CdmEntityContainer="SegurosGAPEntities">
+          <EntitySetMapping Name="Clientes">
+            <EntityTypeMapping TypeName="SegurosGAPModel.Clientes">
+              <MappingFragment StoreEntitySet="Clientes">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="TipoCliente" ColumnName="TipoCliente" />
+                <ScalarProperty Name="Identificacion" ColumnName="Identificacion" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Telefono" ColumnName="Telefono" />
+                <ScalarProperty Name="Direccion" ColumnName="Direccion" />
+                <ScalarProperty Name="Correo" ColumnName="Correo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Cubrimientos">
+            <EntityTypeMapping TypeName="SegurosGAPModel.Cubrimientos">
+              <MappingFragment StoreEntitySet="Cubrimientos">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CubrimientosPoliza">
+            <EntityTypeMapping TypeName="SegurosGAPModel.CubrimientosPoliza">
+              <MappingFragment StoreEntitySet="CubrimientosPoliza">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Poliza" ColumnName="Poliza" />
+                <ScalarProperty Name="Cubrimiento" ColumnName="Cubrimiento" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="NivelesRiesgo">
+            <EntityTypeMapping TypeName="SegurosGAPModel.NivelesRiesgo">
+              <MappingFragment StoreEntitySet="NivelesRiesgo">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Polizas">
+            <EntityTypeMapping TypeName="SegurosGAPModel.Polizas">
+              <MappingFragment StoreEntitySet="Polizas">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Codigo" ColumnName="Codigo" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="PeriodoCobertura" ColumnName="PeriodoCobertura" />
+                <ScalarProperty Name="PorcentajeCubrimiento" ColumnName="PorcentajeCubrimiento" />
+                <ScalarProperty Name="Riesgo" ColumnName="Riesgo" />
+                <ScalarProperty Name="FechaCreacion" ColumnName="FechaCreacion" />
+                <ScalarProperty Name="UsuarioCreacion" ColumnName="UsuarioCreacion" />
+                <ScalarProperty Name="FechaModificacion" ColumnName="FechaModificacion" />
+                <ScalarProperty Name="UsuarioModificacion" ColumnName="UsuarioModificacion" />
+                <ScalarProperty Name="FechaBorrado" ColumnName="FechaBorrado" />
+                <ScalarProperty Name="UsuarioBorrado" ColumnName="UsuarioBorrado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TiposCliente">
+            <EntityTypeMapping TypeName="SegurosGAPModel.TiposCliente">
+              <MappingFragment StoreEntitySet="TiposCliente">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ClientesPolizas">
+            <EntityTypeMapping TypeName="SegurosGAPModel.ClientesPolizas">
+              <MappingFragment StoreEntitySet="ClientesPolizas">
+                <ScalarProperty Name="Activa" ColumnName="Activa" />
+                <ScalarProperty Name="ValorAsegurado" ColumnName="ValorAsegurado" />
+                <ScalarProperty Name="Precio" ColumnName="Precio" />
+                <ScalarProperty Name="InicioVigencia" ColumnName="InicioVigencia" />
+                <ScalarProperty Name="Poliza" ColumnName="Poliza" />
+                <ScalarProperty Name="Cliente" ColumnName="Cliente" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

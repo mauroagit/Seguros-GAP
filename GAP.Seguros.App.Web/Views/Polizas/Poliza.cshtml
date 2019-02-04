@@ -1,0 +1,62 @@
+﻿@model GAP.Seguros.App.Web.Models.PolizaModel
+
+@{
+    ViewBag.Title = "Crear";
+}
+
+<h2>Crear Poliza</h2>
+@using (Html.BeginForm("Guardar", "Polizas", FormMethod.Post, new { @class = ".form-horizontal" }))
+{
+    @Html.AntiForgeryToken()
+
+    @Html.HiddenFor(m => m.Id)
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Codigo)
+        @Html.TextBoxFor(m => m.Codigo, new { @class = "form-control", autofocus = "autofocus" })
+        @Html.ValidationMessageFor(m => m.Codigo)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Nombre)
+        @Html.TextBoxFor(m => m.Nombre, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Nombre)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Descripcion)
+        @Html.TextBoxFor(m => m.Descripcion, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Descripcion)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.PeriodoCobertura)
+        @Html.TextBoxFor(m => m.PeriodoCobertura, new { @class = "form-control", placeholder = "1 a 12" })
+        @Html.ValidationMessageFor(m => m.PeriodoCobertura)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.CubrimientosIds)
+        <div>
+            @Html.ListBoxFor(m => m.CubrimientosIds, new SelectList(Model.CubrimientosPosibles, "Id", "Nombre"), new { @multiple = "multiple" })
+        </div>
+        @Html.ValidationMessageFor(m => m.CubrimientosIds)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.PorcentajeCubrimiento)
+        @Html.TextBoxFor(m => m.PorcentajeCubrimiento, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.PorcentajeCubrimiento)
+        @if (Model.ErrorAlGuardar != null)
+        {
+            <span class="field-validation-error">@Model.ErrorAlGuardar</span>
+        }
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Riesgo)
+        @Html.DropDownListFor(m => m.Riesgo, new SelectList(Model.Riesgos, "Id", "Nombre"), "", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Riesgo)
+    </div>
+    @Html.ActionLink("Cancelar", "Index", null, new { @class = "btn btn-default" })
+    <button type="submit" class="btn btn-primary">Guardar</button>
+}
+
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -1,0 +1,63 @@
+﻿@model GAP.Seguros.App.Web.Models.ClientesPolizasModel
+
+@{
+    ViewBag.Title = "ClientesPolizas";
+}
+
+<h2>Clientes - Polizas</h2>
+
+@using (Html.BeginForm("ClientesPolizas", "Polizas", FormMethod.Post, new { @class = ".form-horizontal" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.ClienteId)
+        @Html.DropDownListFor(m => m.ClienteId, new SelectList(Model.Clientes, "Id", "Nombre"))
+        @Html.ValidationMessageFor(m => m.ClienteId)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.PolizaId)
+        @Html.DropDownListFor(m => m.PolizaId, new SelectList(Model.Polizas, "Id", "Nombre"))
+        @Html.ValidationMessageFor(m => m.PolizaId)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Activar)
+        @Html.CheckBoxFor(m => m.Activar)
+        @Html.ValidationMessageFor(m => m.Activar)
+    </div>
+
+    @Html.ActionLink("Cancelar", "Index", null, new { @class = "btn btn-default" })
+    <button type="submit" class="btn btn-primary">Guardar</button>
+}
+
+<table class="table" id="clientesPolizasTable">
+    <thead>
+        <tr>
+            <th scope="col">Cliente</th>
+            <th scope="col">Poliza</th>
+            <th scope="col">Inicio Vigencia</th>
+            <th scope="col">Precio</th>
+            <th scope="col">Valor Asegurado</th>
+            <th scope="col">Activa?</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var p in Model.ClientesPolizas)
+        {
+            <tr>
+                <td>@p.ClienteTexto</td>
+                <td>@p.PolizaTexto</td>
+                <td>@p.InicioVigencia.ToShortDateString()</td>
+                <td>@p.Precio</td>
+                <td>@p.ValorAsegurado</td>
+                <td>@(p.Activa ? "Si" : "No")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+}

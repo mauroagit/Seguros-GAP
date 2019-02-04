@@ -1,0 +1,54 @@
+﻿@model IEnumerable<GAP.Seguros.App.Web.Models.PolizaModel>
+
+@{
+    ViewBag.Title = "Polizas";
+}
+
+<h2>Polizas</h2>
+
+@Html.ActionLink("Crear Poliza", "Crear", null, new { @class = "btn btn-primary" })
+
+<table class="table" id="polizasTable">
+    <thead>
+        <tr>
+            <th scope="col">Codigo</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Descripcion</th>
+            <th scope="col">Cubrimientos</th>
+            <th scope="col">Periodo</th>
+            <th scope="col">Porcentaje</th>
+            <th scope="col">Riesgo</th>
+            <th scope="col">Editar</th>
+            <th scope="col">Borrar</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var p in Model)
+        {
+            <tr>
+                <td>@p.Codigo</td>
+                <td>@p.Nombre</td>
+                <td>@p.Descripcion</td>
+                <td>@p.CubrimientosTexto</td>
+                <td>@p.PeriodoCobertura</td>
+                <td>@p.PorcentajeCubrimiento</td>
+                <td>@p.RiesgoTexto</td>
+                <td>
+                    @Html.ActionLink(" ", "Editar", new { id = @p.Id }, new { @class = "btn glyphicon glyphicon-pencil" })
+                </td>
+                <td>
+                    <span class="btn glyphicon glyphicon-remove js-borrar" data-poliza-id="@p.Id"></span>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@Scripts.Render("~/bundles/app")
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            PolizasController.init('#polizasTable');
+        });
+    </script>
+}
