@@ -6,7 +6,7 @@ Implementada la asignación/cancelación de clientes a polizas.
 Arquitectura: Clean Architecture, RepositoryPattern
 
 Pendientes:
-  Unit Tests
+  Unit Tests,
   Integration Tests
   
  Base de datos:
